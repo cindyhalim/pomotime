@@ -1,19 +1,18 @@
 #include <iostream>
-#include <string>
 #include "cycle.hpp"
 
 PomoCycle::PomoCycle() {
-  insertNode(head, 'p');
+  insertNode(head, POMODORO);
   Node* curr = head;
-  insertNode(curr, 's');
-  insertNode(curr, 'p');
-  insertNode(curr, 's');
-  insertNode(curr, 'p');
-  insertNode(curr, 's');
-  insertNode(curr, 'p');
-  insertNode(curr, 's');
-  insertNode(curr, 'p');
-  insertNode(curr, 'l');
+  insertNode(curr, SHORT_BREAK);
+  insertNode(curr, POMODORO);
+  insertNode(curr, SHORT_BREAK);
+  insertNode(curr, POMODORO);
+  insertNode(curr, SHORT_BREAK);
+  insertNode(curr, POMODORO);
+  insertNode(curr, SHORT_BREAK);
+  insertNode(curr, POMODORO);
+  insertNode(curr, LONG_BREAK);
 
   currTask = head;
 };
@@ -29,7 +28,7 @@ PomoCycle::~PomoCycle() {
   delete currTask;
 };
 
-char PomoCycle::getCurrentTask() {
+Task PomoCycle::getCurrentTask() {
   std::cout << "curr task: " << currTask->data << std::endl;
   return currTask->data;
 };
@@ -38,7 +37,7 @@ void PomoCycle::setNextTask() {
   currTask = currTask->next;
 };
 
-void PomoCycle::insertNode(Node *&curr, char data) {
+void PomoCycle::insertNode(Node *&curr, Task data) {
   if (head == nullptr) {
     head = new Node;
     head->data = data;

@@ -1,9 +1,15 @@
 #ifndef cycle_H
 #define cycle_H
 
+enum Task {
+  POMODORO,
+  SHORT_BREAK,
+  LONG_BREAK,
+};
+
 struct Node 
 {
-  char data;
+  Task data;
   struct Node *next;
 };
 
@@ -13,7 +19,7 @@ class PomoCycle {
     PomoCycle();
     ~PomoCycle();
 
-    char getCurrentTask();
+    Task getCurrentTask();
     void setNextTask();
 
   private:
@@ -21,7 +27,7 @@ class PomoCycle {
     Node* end = nullptr;
     Node* currTask = nullptr;
 
-    void insertNode(Node *&curr, char data);
+    void insertNode(Node *&curr, Task data);
 };
 
 #endif
