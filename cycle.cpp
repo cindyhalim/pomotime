@@ -26,6 +26,7 @@ PomoCycle::~PomoCycle() {
   }
 
   delete head;
+  delete currTask;
 };
 
 char PomoCycle::getCurrentTask() {
