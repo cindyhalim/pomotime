@@ -1,33 +1,33 @@
 #ifndef cycle_H
-#define cycle_H
+  #define cycle_H
 
-enum Task {
-  POMODORO,
-  SHORT_BREAK,
-  LONG_BREAK,
-};
+  enum Task {
+    POMODORO,
+    SHORT_BREAK,
+    LONG_BREAK,
+  };
 
-struct Node 
-{
-  Task data;
-  struct Node *next;
-};
+  struct Node 
+  {
+    Task data;
+    struct Node *next;
+  };
 
 
-class PomoCycle {
-  public:
-    PomoCycle();
-    ~PomoCycle();
+  class PomoCycle {
+    public:
+      PomoCycle();
+      ~PomoCycle();
 
-    Task getCurrentTask();
-    void setNextTask();
+      Task GetCurrentTask();
+      void SetNextTask();
 
-  private:
-    Node* head = nullptr;
-    Node* end = nullptr;
-    Node* currTask = nullptr;
+    private:
+      Node* head = nullptr;
+      Node* end = nullptr;
+      Node* currTask = nullptr;
 
-    void insertNode(Node *&curr, Task data);
-};
+      void InsertNode(Node *&curr, Task data);
+  };
 
 #endif
