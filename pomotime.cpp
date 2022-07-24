@@ -11,39 +11,7 @@
 #include <sstream>
 #include <iomanip>
 #include "cycle.hpp"
-
-enum {
-  // TODO: htf do we set these ids???
-  BUTTON_start = wxID_ANY + 1,
-  BUTTON_stop = wxID_STOP,
-  BUTTON_skip = wxID_ANY + 2,
-};
-
-class PomoTimeFrame : public wxFrame {
-  public:
-    PomoTimeFrame();
-
-  private:
-    PomoCycle cycle = PomoCycle();
-    // index with Task Enum 🤷‍♀️;
-    const int taskToTimeInMinutes[3] = {25, 5, 15};
-    int timeRemainingInSeconds;
-    wxStaticText* timeRemainingDisplay;
-    wxStaticText* currTaskDisplay;
-    wxTimer timer;
-    
-    void OnExit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-    void OnStart(wxCommandEvent& event);
-    void OnStop(wxCommandEvent& event);
-    void OnSkip(wxCommandEvent& event);
-    void OnUpdateDisplayedTime(wxTimerEvent& event);
-    void UpdateDisplayedTime();
-    void SetCurrTaskTimeInSeconds();
-    std::string GetTimeRemaining();
-    void SetCurrTaskDisplay();
-    void UpdateTask();
-};
+#include "pomotime.hpp"
 
 PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 200), wxSYSTEM_MENU | wxMINIMIZE_BOX | wxCLOSE_BOX | wxCAPTION | wxCLIP_CHILDREN) {
 
@@ -75,14 +43,13 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxP
 
   wxFont font;
 
-  std::string defaultLabel = "25:00";
   currTaskDisplay = new wxStaticText(topPanel, wxID_ANY, "pomodoro", wxDefaultPosition, wxSize(200, 20), wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
   font.MakeBold();
   currTaskDisplay->SetFont(font);
   currTaskDisplay->SetForegroundColour(wxColor(*wxWHITE));
   SetCurrTaskDisplay();
 
-  timeRemainingDisplay = new wxStaticText(topPanel, wxID_ANY, defaultLabel, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  timeRemainingDisplay = new wxStaticText(topPanel, wxID_ANY, "25:00", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
   font = timeRemainingDisplay->GetFont();
   font.MakeBold().Scale(3.0);
   timeRemainingDisplay->SetForegroundColour(wxColor(*wxWHITE));
@@ -185,12 +152,6 @@ void PomoTimeFrame::OnExit(wxCommandEvent& event) {
 
 void PomoTimeFrame::OnAbout(wxCommandEvent& event) {
   wxMessageBox("cindy's first C++ project!", "about pomo time", wxOK | wxICON_INFORMATION);
-};
-
-
-class PomoTime : public wxApp {
-  public:
-    virtual bool OnInit();
 };
 
 wxIMPLEMENT_APP(PomoTime);
