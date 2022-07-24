@@ -3,6 +3,7 @@
 #ifndef WX_PRECOMP
   #include <wx/wx.h>
   #include <wx/datetime.h>
+  #include "wx/sound.h"
 #endif
 
 #include <iostream>
@@ -41,6 +42,7 @@ class PomoTimeFrame : public wxFrame {
     void SetCurrTaskTimeInSeconds();
     std::string GetTimeRemaining();
     void SetCurrTaskDisplay();
+    void UpdateTask();
 };
 
 PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 200), wxSYSTEM_MENU | wxMINIMIZE_BOX | wxCLOSE_BOX | wxCAPTION | wxCLIP_CHILDREN) {
@@ -118,20 +120,20 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxP
 };
 
 void PomoTimeFrame::OnStart(wxCommandEvent& event) {
+  wxSound("./assets/click.wav").Play(wxSOUND_ASYNC);
   timer.Start(1000);
   UpdateDisplayedTime();
 }
 
 void PomoTimeFrame::OnStop(wxCommandEvent& event) {
+  wxSound("./assets/click.wav").Play(wxSOUND_ASYNC);
   timer.Stop();
 }
 
 void PomoTimeFrame::OnSkip(wxCommandEvent& event) {
+  wxSound("./assets/click.wav").Play(wxSOUND_ASYNC);
   timer.Stop();
-  cycle.SetNextTask();
-  SetCurrTaskDisplay();
-  SetCurrTaskTimeInSeconds();
-  timeRemainingDisplay->SetLabel(GetTimeRemaining());
+  UpdateTask();
 }
 
 void PomoTimeFrame::SetCurrTaskDisplay(){
@@ -160,12 +162,20 @@ void PomoTimeFrame::UpdateDisplayedTime() {
   timeRemainingDisplay->SetLabel(GetTimeRemaining());
 }
 
+void PomoTimeFrame::UpdateTask() {
+  cycle.SetNextTask();
+  SetCurrTaskDisplay();
+  SetCurrTaskTimeInSeconds();
+  timeRemainingDisplay->SetLabel(GetTimeRemaining());
+}
+
 void PomoTimeFrame::OnUpdateDisplayedTime(wxTimerEvent& event) {
   if (timeRemainingInSeconds > 0) {
     UpdateDisplayedTime();
   } else {
-    // TODO: add sound functionality
     timer.Stop();
+    wxSound("./assets/tone.wav").Play(wxSOUND_ASYNC);
+    UpdateTask();
   }
 }
 
