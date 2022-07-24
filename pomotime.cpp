@@ -54,7 +54,7 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(NULL, wxID_ANY, "pomo 🍅 time", wxPoin
 
   // APP
 
-  wxPanel *textDisplayPanel = new wxPanel(this, -1, wxDefaultPosition, wxSize(300, 300));
+  
   wxPanel *buttonsPanel = new wxPanel(this, -1);
 
   wxBoxSizer *vbox = new wxBoxSizer(wxVERTICAL);
