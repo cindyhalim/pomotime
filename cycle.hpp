@@ -27,7 +27,6 @@
     private:
       Node* head = nullptr;
       Node* end = nullptr;
-      Node* currTask = nullptr;
 
       void InsertNode(Node *&curr, Task data);
   };

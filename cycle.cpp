@@ -15,7 +15,6 @@ PomoCycle::PomoCycle() {
   InsertNode(curr, POMODORO);
   InsertNode(curr, LONG_BREAK);
 
-  currTask = head;
 };
 
 PomoCycle::~PomoCycle() {
@@ -26,11 +25,10 @@ PomoCycle::~PomoCycle() {
   }
 
   delete head;
-  //TODO: why is it mad when i free currTask?
 };
 
 Task PomoCycle::GetCurrentTask() {
-  return currTask->data;
+  return head->data;
 };
 
 std::string PomoCycle::GetCurrentTaskName() {
@@ -48,7 +46,7 @@ std::string PomoCycle::GetCurrentTaskName() {
 };
 
 void PomoCycle::SetNextTask() {
-  currTask = currTask->next;
+  head = head->next;
 };
 
 void PomoCycle::InsertNode(Node *&curr, Task data) {
