@@ -1,3 +1,4 @@
+#include <string>
 #ifndef cycle_H
   #define cycle_H
 
@@ -20,6 +21,7 @@
       ~PomoCycle();
 
       Task GetCurrentTask();
+      std::string GetCurrentTaskName();
       void SetNextTask();
 
     private:

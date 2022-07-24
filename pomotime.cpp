@@ -28,6 +28,7 @@ class PomoTimeFrame : public wxFrame {
     const int taskToTimeInMinutes[3] = {25, 5, 15};
     int timeRemainingInSeconds;
     wxStaticText* timeRemainingDisplay;
+    wxStaticText* currTaskDisplay;
     wxTimer timer;
     
     void OnExit(wxCommandEvent& event);
@@ -39,6 +40,7 @@ class PomoTimeFrame : public wxFrame {
     void OnUpdateDisplayedTime(wxTimerEvent& event);
     void SetCurrTaskTimeInSeconds();
     std::string GetTimeRemaining();
+    void SetCurrTaskDisplay();
 };
 
 PomoTimeFrame::PomoTimeFrame(): wxFrame(NULL, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 300)) {
@@ -62,6 +64,9 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(NULL, wxID_ANY, "pomo 🍅 time", wxPoin
   wxFont font;
 
   std::string defaultLabel = "25:00";
+  currTaskDisplay = new wxStaticText(buttonsPanel, wxID_ANY, "pomodoro", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  SetCurrTaskDisplay();
+
   timeRemainingDisplay = new wxStaticText(buttonsPanel, wxID_ANY, defaultLabel, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
   font = timeRemainingDisplay->GetFont();
   font.MakeBold().MakeLarger();
@@ -108,14 +113,19 @@ void PomoTimeFrame::OnStop(wxCommandEvent& event) {
   std::cout << "Stop button clicked!" << std::endl;
   timer.Stop();
 }
+
 void PomoTimeFrame::OnSkip(wxCommandEvent& event) {
   std::cout << "Skip button clicked!" << std::endl;
   cycle.SetNextTask();
-  Task currentTask = cycle.GetCurrentTask();
+  SetCurrTaskDisplay();
   SetCurrTaskTimeInSeconds();
   timeRemainingDisplay->SetLabel(GetTimeRemaining());
 }
 
+void PomoTimeFrame::SetCurrTaskDisplay(){
+  std::string currTaskName = cycle.GetCurrentTaskName();
+  currTaskDisplay->SetLabel(currTaskName);
+}
 
 void PomoTimeFrame::SetCurrTaskTimeInSeconds() {
   Task currentTask = cycle.GetCurrentTask();
@@ -130,7 +140,6 @@ std::string PomoTimeFrame::GetTimeRemaining() {
   rv << minutes << ":" << std::setfill('0') << std::setw(2) << seconds;
   return rv.str();
 }
-
 
 void PomoTimeFrame::UpdateDisplayedTime() {
   if (timer.IsRunning()) {

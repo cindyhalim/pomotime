@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "cycle.hpp"
 
 PomoCycle::PomoCycle() {
@@ -31,6 +32,20 @@ PomoCycle::~PomoCycle() {
 Task PomoCycle::GetCurrentTask() {
   std::cout << "curr task: " << currTask->data << std::endl;
   return currTask->data;
+};
+
+std::string PomoCycle::GetCurrentTaskName() {
+  switch (GetCurrentTask()) {
+    case 0:
+      return "pomodoro";
+    case 1:
+      return "short break";
+    case 2:
+      return "long break";
+    default:
+      std::cout << "Task not found" << std::endl;
+      return "";
+  }
 };
 
 void PomoCycle::SetNextTask() {
