@@ -4,6 +4,8 @@
 
 simple pomodoro timer made with [wxWidgets](https://www.wxwidgets.org/)
 
+![demo](https://github.com/cindyhalim/pomotime/blob/master/docs/demo.png)
+
 </center>
 
 <br/>
