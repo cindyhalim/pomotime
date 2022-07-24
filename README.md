@@ -1,12 +1,12 @@
-# **pomo 🍅 time**
+<div align="center">
 
-<center>
+# **pomo 🍅 time**
 
 simple pomodoro timer made with [wxWidgets](https://www.wxwidgets.org/)
 
 ![demo](https://github.com/cindyhalim/pomotime/blob/master/docs/demo.png)
 
-</center>
+</div>
 
 <br/>
 
