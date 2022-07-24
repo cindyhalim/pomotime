@@ -36,14 +36,14 @@ class PomoTimeFrame : public wxFrame {
     void OnStart(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
     void OnSkip(wxCommandEvent& event);
-    void UpdateDisplayedTime();
     void OnUpdateDisplayedTime(wxTimerEvent& event);
+    void UpdateDisplayedTime();
     void SetCurrTaskTimeInSeconds();
     std::string GetTimeRemaining();
     void SetCurrTaskDisplay();
 };
 
-PomoTimeFrame::PomoTimeFrame(): wxFrame(NULL, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 300)) {
+PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 200)) {
 
   // MENU BAR STUFF
   wxMenu* menuHelp = new wxMenu;
@@ -57,40 +57,54 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(NULL, wxID_ANY, "pomo 🍅 time", wxPoin
   // APP
 
   
-  wxPanel *buttonsPanel = new wxPanel(this, -1);
+  wxPanel* topPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(400, 150));
+  // topPanel->SetBackgroundColour(wxColor(100, 100, 200));
+  wxPanel* bottomPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(400, 50));
+  // bottomPanel->SetBackgroundColour(wxColor(100, 200, 100));
 
-  wxBoxSizer *vbox = new wxBoxSizer(wxVERTICAL);
-  wxBoxSizer *buttonsRowBox = new wxBoxSizer(wxHORIZONTAL);
+  wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer* verticalButtonSizer = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer* horizontalButtonSizer = new wxBoxSizer(wxHORIZONTAL);
+  wxBoxSizer* verticalTextSizer = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer* horizontalCurrTaskSizer = new wxBoxSizer(wxHORIZONTAL);
+  wxBoxSizer* horizontalTimeRemainingSizer = new wxBoxSizer(wxHORIZONTAL);
+
+  sizer->Add(topPanel, 2, wxEXPAND | wxALL);
+  sizer->Add(bottomPanel, 0, wxEXPAND | wxALL);
+
+  this->SetSizerAndFit(sizer);
+
   wxFont font;
 
   std::string defaultLabel = "25:00";
-  currTaskDisplay = new wxStaticText(buttonsPanel, wxID_ANY, "pomodoro", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  currTaskDisplay = new wxStaticText(topPanel, wxID_ANY, "pomodoro", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
   SetCurrTaskDisplay();
 
-  timeRemainingDisplay = new wxStaticText(buttonsPanel, wxID_ANY, defaultLabel, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  timeRemainingDisplay = new wxStaticText(topPanel, wxID_ANY, defaultLabel, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
   font = timeRemainingDisplay->GetFont();
   font.MakeBold().MakeLarger();
   timeRemainingDisplay->SetFont(font);
   SetCurrTaskTimeInSeconds();
   UpdateDisplayedTime();
 
-
-  wxButton *playButton = new wxButton(buttonsPanel, BUTTON_start, wxT("start"));
-  wxButton *stopButton = new wxButton(buttonsPanel, BUTTON_stop, wxT("stop"));
-  wxButton *skipButton = new wxButton(buttonsPanel, BUTTON_skip, wxT("skip"));
-
+  horizontalCurrTaskSizer->Add(currTaskDisplay);
+  horizontalTimeRemainingSizer->Add(timeRemainingDisplay);
   
-  buttonsRowBox->Add(playButton);
-  buttonsRowBox->Add(stopButton);
-  buttonsRowBox->Add(skipButton);
 
-  vbox->Add(buttonsRowBox, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER, 10);
-  buttonsPanel->SetSizer(vbox);
+  wxButton *playButton = new wxButton(bottomPanel, BUTTON_start, wxT("start"));
+  wxButton *stopButton = new wxButton(bottomPanel, BUTTON_stop, wxT("stop"));
+  wxButton *skipButton = new wxButton(bottomPanel, BUTTON_skip, wxT("skip"));
 
-  Centre();
+  horizontalButtonSizer->Add(playButton);
+  horizontalButtonSizer->Add(stopButton);
+  horizontalButtonSizer->Add(skipButton);
 
+  verticalTextSizer->Add(horizontalCurrTaskSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER | wxTOP, 50);
+  verticalTextSizer->Add(horizontalTimeRemainingSizer, 2, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER | wxTOP | wxBOTTOM, 20);
+  verticalButtonSizer->Add(horizontalButtonSizer, 0,  wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER);
 
-
+  topPanel->SetSizer(verticalTextSizer);
+  bottomPanel->SetSizer(verticalButtonSizer);
 
   // EVENTS
 

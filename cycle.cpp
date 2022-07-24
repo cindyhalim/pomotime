@@ -30,7 +30,6 @@ PomoCycle::~PomoCycle() {
 };
 
 Task PomoCycle::GetCurrentTask() {
-  std::cout << "curr task: " << currTask->data << std::endl;
   return currTask->data;
 };
 
