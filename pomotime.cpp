@@ -43,7 +43,7 @@ class PomoTimeFrame : public wxFrame {
     void SetCurrTaskDisplay();
 };
 
-PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 200)) {
+PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 200), wxSYSTEM_MENU | wxMINIMIZE_BOX | wxCLOSE_BOX | wxCAPTION | wxCLIP_CHILDREN) {
 
   // MENU BAR STUFF
   wxMenu* menuHelp = new wxMenu;
@@ -56,11 +56,8 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxP
 
   // APP
 
-  
   wxPanel* topPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(400, 150));
-  // topPanel->SetBackgroundColour(wxColor(100, 100, 200));
   wxPanel* bottomPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(400, 50));
-  // bottomPanel->SetBackgroundColour(wxColor(100, 200, 100));
 
   wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer* verticalButtonSizer = new wxBoxSizer(wxVERTICAL);
@@ -77,12 +74,16 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxP
   wxFont font;
 
   std::string defaultLabel = "25:00";
-  currTaskDisplay = new wxStaticText(topPanel, wxID_ANY, "pomodoro", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  currTaskDisplay = new wxStaticText(topPanel, wxID_ANY, "pomodoro", wxDefaultPosition, wxSize(200, 20), wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  font.MakeBold();
+  currTaskDisplay->SetFont(font);
+  currTaskDisplay->SetForegroundColour(wxColor(*wxWHITE));
   SetCurrTaskDisplay();
 
   timeRemainingDisplay = new wxStaticText(topPanel, wxID_ANY, defaultLabel, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
   font = timeRemainingDisplay->GetFont();
-  font.MakeBold().MakeLarger();
+  font.MakeBold().Scale(3.0);
+  timeRemainingDisplay->SetForegroundColour(wxColor(*wxWHITE));
   timeRemainingDisplay->SetFont(font);
   SetCurrTaskTimeInSeconds();
   UpdateDisplayedTime();
@@ -90,7 +91,6 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxP
   horizontalCurrTaskSizer->Add(currTaskDisplay);
   horizontalTimeRemainingSizer->Add(timeRemainingDisplay);
   
-
   wxButton *playButton = new wxButton(bottomPanel, BUTTON_start, wxT("start"));
   wxButton *stopButton = new wxButton(bottomPanel, BUTTON_stop, wxT("stop"));
   wxButton *skipButton = new wxButton(bottomPanel, BUTTON_skip, wxT("skip"));
@@ -99,7 +99,7 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxP
   horizontalButtonSizer->Add(stopButton);
   horizontalButtonSizer->Add(skipButton);
 
-  verticalTextSizer->Add(horizontalCurrTaskSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER | wxTOP, 50);
+  verticalTextSizer->Add(horizontalCurrTaskSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER | wxTOP, 30);
   verticalTextSizer->Add(horizontalTimeRemainingSizer, 2, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER | wxTOP | wxBOTTOM, 20);
   verticalButtonSizer->Add(horizontalButtonSizer, 0,  wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER);
 
@@ -118,18 +118,16 @@ PomoTimeFrame::PomoTimeFrame(): wxFrame(nullptr, wxID_ANY, "pomo 🍅 time", wxP
 };
 
 void PomoTimeFrame::OnStart(wxCommandEvent& event) {
-  std::cout << "Start button clicked!" << std::endl;
   timer.Start(1000);
   UpdateDisplayedTime();
 }
 
 void PomoTimeFrame::OnStop(wxCommandEvent& event) {
-  std::cout << "Stop button clicked!" << std::endl;
   timer.Stop();
 }
 
 void PomoTimeFrame::OnSkip(wxCommandEvent& event) {
-  std::cout << "Skip button clicked!" << std::endl;
+  timer.Stop();
   cycle.SetNextTask();
   SetCurrTaskDisplay();
   SetCurrTaskTimeInSeconds();
@@ -190,6 +188,7 @@ wxIMPLEMENT_APP(PomoTime);
 // opens the app
 bool PomoTime::OnInit() {
   PomoTimeFrame *frame = new PomoTimeFrame();
+  frame->SetBackgroundColour(wxColor(222, 100, 91));
   frame->Show(true);
   
   return true;
