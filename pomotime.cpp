@@ -24,6 +24,7 @@ class PomoTimeFrame : public wxFrame {
 
   private:
     PomoCycle cycle = PomoCycle();
+    // index with Task Enum 🤷‍♀️;
     const int taskToTimeInMinutes[3] = {25, 5, 15};
     int timeRemainingInSeconds;
     wxStaticText* timeRemainingDisplay;
@@ -40,41 +41,53 @@ class PomoTimeFrame : public wxFrame {
     std::string GetTimeRemaining();
 };
 
-PomoTimeFrame::PomoTimeFrame(): wxFrame(NULL, wxID_ANY, "pomo 🍅 time") {
+PomoTimeFrame::PomoTimeFrame(): wxFrame(NULL, wxID_ANY, "pomo 🍅 time", wxPoint(-1, -1),  wxSize(400, 300)) {
 
-  // menu bar stuff
+  // MENU BAR STUFF
   wxMenu* menuHelp = new wxMenu;
   menuHelp->Append(wxID_ABOUT);
 
   wxMenuBar* menuBar = new wxMenuBar;
   menuBar->Append(menuHelp, "&Help");
 
-  // app
-  
-  wxPanel *panel = new wxPanel(this, -1);
+  SetMenuBar( menuBar );
+
+  // APP
+
+  wxPanel *textDisplayPanel = new wxPanel(this, -1, wxDefaultPosition, wxSize(300, 300));
+  wxPanel *buttonsPanel = new wxPanel(this, -1);
 
   wxBoxSizer *vbox = new wxBoxSizer(wxVERTICAL);
-  wxBoxSizer *hbox2 = new wxBoxSizer(wxHORIZONTAL);
+  wxBoxSizer *buttonsRowBox = new wxBoxSizer(wxHORIZONTAL);
+  wxFont font;
 
   std::string defaultLabel = "25:00";
-  timeRemainingDisplay = new wxStaticText(panel, wxID_ANY, defaultLabel, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  timeRemainingDisplay = new wxStaticText(buttonsPanel, wxID_ANY, defaultLabel, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+  font = timeRemainingDisplay->GetFont();
+  font.MakeBold().MakeLarger();
+  timeRemainingDisplay->SetFont(font);
   SetCurrTaskTimeInSeconds();
   UpdateDisplayedTime();
 
-  wxButton *playButton = new wxButton(panel, BUTTON_start, wxT("start"));
-  wxButton *stopButton = new wxButton(panel, BUTTON_stop, wxT("stop"));
-  wxButton *skipButton = new wxButton(panel, BUTTON_skip, wxT("skip"));
+
+  wxButton *playButton = new wxButton(buttonsPanel, BUTTON_start, wxT("start"));
+  wxButton *stopButton = new wxButton(buttonsPanel, BUTTON_stop, wxT("stop"));
+  wxButton *skipButton = new wxButton(buttonsPanel, BUTTON_skip, wxT("skip"));
 
   
-  hbox2->Add(playButton);
-  hbox2->Add(stopButton);
-  hbox2->Add(skipButton);
+  buttonsRowBox->Add(playButton);
+  buttonsRowBox->Add(stopButton);
+  buttonsRowBox->Add(skipButton);
 
-  vbox->Add(hbox2, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER, 10);
-  panel->SetSizer(vbox);
+  vbox->Add(buttonsRowBox, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER, 10);
+  buttonsPanel->SetSizer(vbox);
+
   Centre();
 
-  SetMenuBar( menuBar );
+
+
+
+  // EVENTS
 
   Bind(wxEVT_MENU, &PomoTimeFrame::OnAbout, this, wxID_ABOUT);
   Bind(wxEVT_MENU, &PomoTimeFrame::OnExit, this, wxID_EXIT);
