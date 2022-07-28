@@ -8,13 +8,10 @@ simple pomodoro timer made with [wxWidgets](https://www.wxwidgets.org/)
 
 </div>
 
-<br/>
-
 ### **motivation:**
 
 - first attempt at building something with C++
 
-  <br/>
 
 ### **features:**
 
@@ -26,7 +23,6 @@ simple pomodoro timer made with [wxWidgets](https://www.wxwidgets.org/)
 - cycle composed of 4 intervals of pomodoro + short break and 1 interval of pomodoro + long break 🚴
 - calming notification on task end 😌
 
-<br/>
 
 ### **setup:**
 
@@ -42,7 +38,6 @@ git submodule update --init --recursive
 - **run**: cd to `build` and run `./pomotime`
 - the above commands are provided in shell scripts. run `chmod +x ./build.sh ./configure.sh ./run.sh` to allow access
 
-<br/>
 
 ### **improvements:**
 
